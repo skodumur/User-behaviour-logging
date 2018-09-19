@@ -2,72 +2,75 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Axios from 'axios';
+import Main from '../src/Main';
+import { Button, Form } from 'semantic-ui-react'
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
+      isLoggedIn: false,
       user: '',
-      allname:[]
+      pass: '',
+      allname: []
     };
     this.handleClick = this.handleClick.bind(this);
 
   }
-  componentDidMount(){
-    this.getAllUsers();
-  }
+
   async getAllUsers() {
-    try{
+    try {
       const getResponse = await Axios.get(`http://localhost:3001/users`);
       console.log(getResponse);
-      this.setState({allname: getResponse.data.users});
+      this.setState({ allname: getResponse.data.users });
     }
-    catch(error){
+    catch (error) {
       console.log(error);
     }
   }
-  async handleClick()  {
-    console.log(this.state.user);
-    if(this.state.user !== ''){
+  async handleClick(e) {
+    e.preventDefault();
+    if (this.state.user !== '') {
       var userObj = {
-        name: this.state.user
+        name: this.state.user,
+        pass: this.state.pass
       };
-      try{
-        const response = await Axios.post(`http://localhost:3001/users`, userObj);
-        console.log(response);
+      try {
+        const response = await Axios.post(`http://localhost:3001/users/login`, userObj);
+        if (response.data && response.data.response) {
+          this.setState({ isLoggedIn: userObj.name });
       }
-      catch(error){
+      }
+      catch (error) {
         console.log(error);
       }
-      this.getAllUsers();
-      
-
     }
 
   }
   render() {
+    console.log(this.state.isLoggedIn);
+    if (this.state.isLoggedIn) {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React, Again!!!!</h1>
+            <h1 className="App-title">CSE 591 Topic: Adaptive Web </h1>
+            <h1 className="App-title">Please login to continue :) </h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <input type="text" value={this.state.user} onChange={(e) => this.setState({user:e.target.value})} />
-        <button onClick={this.handleClick} > Submit </button>
-        <div className="theList1">
-        Available user
-          <ol className="theList">
-                {this.state.allname.map(function(user, index){
-                    return <li key={ index}>{user.name}</li>;
-                  })}
-          </ol>
-        </div>
-        
-      </div>
-    );
+          <Form className="login-form">
+            <Form.Field>
+              <label>User Name</label>
+              <input placeholder='User Name' type="text" value={this.state.user} onChange={(e) => this.setState({ user: e.target.value })} />
+            </Form.Field>
+            <Form.Field>
+              <label>Password </label>
+              <input placeholder='Password' type="password" value={this.state.pass} onChange={(e) => this.setState({ pass: e.target.value })} />
+            </Form.Field>
+            <Button onClick={this.handleClick} >Submit</Button>
+          </Form>
+        </div>)
+    } else {
+      return (<Main></Main>)
+    }
   }
 }
 
