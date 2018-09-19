@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Axios from 'axios';
 import Main from '../src/Main';
@@ -9,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
+      loggerInUser: 'aaa',
       user: '',
       pass: '',
       allname: []
@@ -38,7 +37,7 @@ class App extends Component {
       try {
         const response = await Axios.post(`http://localhost:3001/users/login`, userObj);
         if (response.data && response.data.response) {
-          this.setState({ isLoggedIn: userObj.name });
+          this.setState({ loggerInUser: userObj.name });
       }
       }
       catch (error) {
@@ -48,8 +47,7 @@ class App extends Component {
 
   }
   render() {
-    console.log(this.state.isLoggedIn);
-    if (this.state.isLoggedIn) {
+    if (!this.state.loggerInUser) {
     return (
       <div className="App">
         <header className="App-header">
@@ -59,17 +57,17 @@ class App extends Component {
           <Form className="login-form">
             <Form.Field>
               <label>User Name</label>
-              <input placeholder='User Name' type="text" value={this.state.user} onChange={(e) => this.setState({ user: e.target.value })} />
+              <input placeholder='User Name' type="text"  onChange={(e) => this.setState({ user: e.target.value })} />
             </Form.Field>
             <Form.Field>
               <label>Password </label>
-              <input placeholder='Password' type="password" value={this.state.pass} onChange={(e) => this.setState({ pass: e.target.value })} />
+              <input placeholder='Password' type="password" onChange={(e) => this.setState({ pass: e.target.value })} />
             </Form.Field>
             <Button onClick={this.handleClick} >Submit</Button>
           </Form>
         </div>)
     } else {
-      return (<Main></Main>)
+      return (<Main user={this.state.loggerInUser}></Main>)
     }
   }
 }

@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-scripts": "1.1.5",
+    "semantic-ui-css": "^2.4.0",
     "semantic-ui-react": "^0.81"
   },
   "scripts": {

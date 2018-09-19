@@ -27,13 +27,16 @@ router.get('/', function(req, res, next) {
   });
 
 router.post('/', (req, res, next) => {
-
-    const post = new Post({
-        ...req.body,
-        _id: new mongoose.Types.ObjectId(),
-    });
-  
-    post
+    Post.find()
+    .select()
+    .exec()
+    .then((docs) => {
+        const post = new Post({
+            ...req.body,
+            id: ++docs.length,
+            _id: new mongoose.Types.ObjectId(),
+        });
+        post
         .save()
         .then( result => {
             console.log(result);
@@ -46,10 +49,11 @@ router.post('/', (req, res, next) => {
             res.status(500).json({
                 error: error
             });
-            
         });
+    })
+
   
-   
+
   });
 
   

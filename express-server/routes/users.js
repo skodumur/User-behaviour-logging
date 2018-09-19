@@ -4,7 +4,7 @@ const moment = require('moment');
 
 var router = express.Router();
 const User = require('../models/User');
-const LoginLogs = require('../models/LoginLogs');
+const LoginLogs = require('../models/LoginLog');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
