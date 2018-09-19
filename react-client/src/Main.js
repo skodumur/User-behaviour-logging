@@ -9,9 +9,19 @@ import _ from 'lodash';
 class Main extends Component {
     state = { activeIndex: 0, allPosts: [], newTitle: '', newContent: '' };
     logs = [];
+    lastTime ;
     handleClick = (e, titleProps) => {
         const { index } = titleProps;
         const { activeIndex } = this.state;
+        if (!activeIndex || index != activeIndex) {
+            this.logs.push({
+                type: "view",
+                time: moment().format('MMMM Do YYYY, h:mm:ss a'),
+                owner: this.props.user,
+                value: Date.now() - this.lastTime,
+                question: activeIndex || 1
+            });
+        }
         const newIndex = activeIndex === index ? -1 : index;
         this.setState({ activeIndex: newIndex });
         this.logs.push({
@@ -46,6 +56,7 @@ class Main extends Component {
     
       }
     componentDidMount() {
+        this.lastTime = Date.now();
         this.getAllPosts();
         setInterval(() => {
             if (this.logs.length) {
