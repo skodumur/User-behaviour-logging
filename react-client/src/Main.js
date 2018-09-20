@@ -13,20 +13,20 @@ class Main extends Component {
         'UPVOTE': 'upvotes',
         'DOWNVOTE': 'downvotes'
     }
-    state = { open: false, activeIndex: -1, allPosts: [], newTitle: '', newContent: '', clickData: {}, viewData: {}, postData: {}, activeId: false };
+    state = { open: false, activeIndex: -1, allPosts: [], newTitle: '', newContent: '', clickData: {}, viewData: {}, postData: {}, activeId: false, lastTime: 0, lastId: 0, maxData: {}};
     logs = [];
-    lastTime ;
-    handleClick = (e, titleProps) => {
+    handleClick(e, titleProps) {
         const { index } = titleProps;
         const { activeIndex } = this.state;
         const newIndex = activeIndex === index ? -1 : index;
-        if (index !== activeIndex && activeIndex > -1) {
+        const id = this.state.allPosts[index].id;
+        if (this.state.lastId) {
             this.logs.push({
                 type: "view",
                 time: moment().format('MMMM Do YYYY, h:mm:ss a'),
                 owner: this.props.user,
-                value: Math.ceil((Date.now() - this.lastTime)/1000),
-                question: this.state.allPosts[activeIndex].id 
+                value: Math.ceil((Date.now() - this.state.lastTime)/1000),
+                question: this.state.lastId 
             });
 
         }
@@ -35,12 +35,15 @@ class Main extends Component {
             time: moment().format('MMMM Do YYYY, h:mm:ss a'),
             owner: this.props.user,
             value: 0,
-            question: this.state.allPosts[index].id
+            question: id
         });
         this.debouncedUpload();
-        this.setState({ activeIndex: newIndex });
+        this.setState({ activeIndex: newIndex, lastId: id, lastTime: Date.now() });
     };
     handleVote = (e) => {
+        if (e.target.className.indexOf('disabled') > -1) {
+            return;
+        }
         const question = +e.target.getAttribute('idval');
         const type = (e.target.className.indexOf('down') > -1) ? this.CONSTANTS.DOWNVOTE : this.CONSTANTS.UPVOTE;
         e.target.className = e.target.className + ' disabled';
@@ -107,7 +110,7 @@ class Main extends Component {
     refresh() {
         Axios.get(`http://localhost:3001/events/user/${this.props.user}`)
             .then((res) => {
-                let click = {}, view = {}, post={};
+                let click = {}, view = {}, post={}, maxClick = 0 , maxDate = 0, maxView = 0, maxClickQuestion= 0, maxDateQuestion=0, maxViewQuestion=0;
                 _.forEach(res.data.logs, (log) => {
                     if (log.type === 'click') {
                         if (click[log.question]) {
@@ -115,11 +118,19 @@ class Main extends Component {
                         } else {
                             click[log.question] = 1;
                         }
+                        if (maxClick < click[log.question]) {
+                            maxClick = click[log.question];
+                            maxClickQuestion = log.question;
+                        }
                     } else if (log.type === 'view') {
                         if (view[log.question]) {
                             view[log.question] += +log.value;
                         } else {
                             view[log.question] = +log.value;
+                        }
+                        if (maxView < view[log.question]) {
+                            maxView = view[log.question];
+                            maxViewQuestion = log.question;
                         }
                     } else if(log.type === 'post') {
                         let date = moment(log.time,'MMMM Do YYYY, h:mm:ss a' ).format('MM/DD/YYYY');
@@ -128,8 +139,13 @@ class Main extends Component {
                         } else {
                             post[date] = 1;
                         }
+                        if (maxDate < post[log.question]) {
+                            maxDate = post[log.question];
+                            maxDateQuestion = log.question;
+                        }
                     }
-                })
+                });
+                this.setState({maxData: {maxClick, maxClickQuestion, maxView, maxViewQuestion, maxDate, maxDateQuestion}});
                 this.setState({ clickData: click });
                 this.setState({ viewData: view });
                 this.setState({ postData: post });
@@ -205,7 +221,7 @@ class Main extends Component {
                                             <Accordion.Title
                                                 active={activeIndex === index}
                                                 index={index}
-                                                onClick={this.handleClick}>
+                                                onClick={this.handleClick.bind(this)}>
                                                 <Icon name="dropdown" />
                                                 <label>{allPosts[index].id}. </label>
                                                 <label dangerouslySetInnerHTML={{ __html: allPosts[index].title }}></label>
@@ -224,21 +240,21 @@ class Main extends Component {
                         </div>
                     </div>
                     <div className="col-6">
-                        <UserLogs user={this.props.user} closeFn={this.close.bind(this)} openFlag={this.state.open}></UserLogs>
+                        <UserLogs user={this.props.user} closeFn={this.close.bind(this)} openFlag={this.state.open} maxData={this.state.maxData}></UserLogs>
                         <div className="chart-div">
-                            <div>
+                            <div className="single-chart">
                                 <Plot
                                     data={[{ type: 'bar', x: _.keys(this.state.clickData), y: _.values(this.state.clickData) }]}
-                                    layout={{ title: 'Number of clicks for each question' }}
+                                    layout={{ title: 'Number of clicks for each question', xaxis: { title: 'Question Number'},  yaxis: {  title: 'Number of clicker' } }}
                                 />
                             </div>
-                            <div>
+                            <div className="single-chart">
                                 <Plot
-                                    data={[{ x: _.keys(this.state.viewData), y: _.values(this.state.viewData) }]}
-                                    layout={{ title: 'Time for which each question is viewed' }}
+                                    data={[{ x: _.keys(this.state.viewData), y: _.values(this.state.viewData)}]}
+                                    layout={{ title: 'Time for which each question is viewed', xaxis: { title: 'Question Number'},  yaxis: {  title: 'Time Spent(seconds)' }}}
                                 />
                             </div>
-                            <div>
+                            <div className="single-chart">
                                 <Plot
                                     data={[{ marker: {
                                         colors: ["#76b7b2", "#ff8c00", "#1170aa", "#fc7d0b", "#a3acb9", "#57606c", "#5fa2ce", "#c85200", "#7b848f"]

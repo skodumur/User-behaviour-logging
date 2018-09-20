@@ -1,5 +1,5 @@
 .my-modal{
-    height: 600px !important;
+    height: 640px !important;
 }
 .image.scrolling.content {
     height: 450px !important;
@@ -10,4 +10,7 @@
 
 .ui.table th {
     padding: 0.5em;
+}
+.description {
+    width: 100% !important;
 }

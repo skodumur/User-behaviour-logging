@@ -70,7 +70,7 @@ router.post('/login', (req, res, next) => {
                 const log = new LoginLogs({
                     _id: new mongoose.Types.ObjectId(),
                     name: req.body.name,
-                    time: moment().format('MMMM Do YYYY, h:mm:ss a')
+                    time: req.body.time
                 });
                 log.save()
                     .then(result => {
@@ -97,6 +97,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/logs/:name', function (req, res, next) {
     LoginLogs.find({name: req.params.name})
+        .sort({_id:-1})
         .limit(10)
         .exec()
         .then(docs => {

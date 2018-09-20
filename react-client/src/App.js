@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Axios from 'axios';
 import Main from '../src/Main';
+import moment from 'moment';
 import { Button, Form, Modal, Header } from 'semantic-ui-react'
 
 class App extends Component {
@@ -42,7 +43,8 @@ class App extends Component {
     if (this.state.user !== '') {
       var userObj = {
         name: this.state.user,
-        pass: this.state.pass
+        pass: this.state.pass,
+        time: moment().format('MMMM Do YYYY, h:mm:ss a')
       };
       try {
         const response = await Axios.post(`http://localhost:3001/users/login`, userObj);
