@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
+import './UserLogs.css'
 import { Table, Accordion, Icon, Button, Header, Image, Modal } from 'semantic-ui-react'
 
 class UserLogs extends Component {
@@ -22,15 +23,15 @@ class UserLogs extends Component {
     }
     render() {
         const { activeId, logs } = this.state;
-        return (      <div>
-    
-            <Modal open={this.props.openFlag} size="large">
-              <Modal.Header>User Profile</Modal.Header>
-              <Modal.Content image scrolling>
-               <Icon name="image" size='massive'></Icon>
-                <Modal.Description>
-                  <Header>{this.props.user}</Header>
-                  <Table celled padded>
+        return (<div>
+
+            <Modal open={this.props.openFlag} size="large" className="my-modal">
+                <Modal.Header>User Profile</Modal.Header>
+                <Modal.Content image scrolling>
+                    <Icon name="image" size='massive'></Icon>
+                    <Modal.Description>
+                        <Header>{this.props.user}</Header>
+                        <Table celled>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Sequence</Table.HeaderCell>
@@ -51,15 +52,15 @@ class UserLogs extends Component {
                                 })}
                             </Table.Body>
                         </Table>
-                </Modal.Description>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button primary onClick={this.props.closeFn}>
-                  Close
+                    </Modal.Description>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button primary onClick={this.props.closeFn}>
+                        Close
                 </Button>
-              </Modal.Actions>
+                </Modal.Actions>
             </Modal>
-          </div> )
+        </div> )
     }
 }
 

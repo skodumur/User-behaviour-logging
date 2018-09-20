@@ -1,6 +1,9 @@
 .main-div {
     margin: 50px;
 }
+.left-div{
+    margin-left: 70px;
+}
 .chart-div{
     border: solid 1px #ced4da;
     border-radius: .28571429rem;

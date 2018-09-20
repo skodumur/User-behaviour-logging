@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       modalOpen: false,
-      loggerInUser: 'ccc',
+      loggerInUser: '',
       user: '',
       pass: '',
       newName:'',
@@ -31,6 +31,12 @@ class App extends Component {
       console.log(error);
     }
   }
+  componentWillMount() {
+    let user = sessionStorage.getItem('user');
+    if (user) {
+      this.setState({loggerInUser: user});
+    }
+  }
   async handleClick(e) {
     e.preventDefault();
     if (this.state.user !== '') {
@@ -42,6 +48,7 @@ class App extends Component {
         const response = await Axios.post(`http://localhost:3001/users/login`, userObj);
         if (response.data && response.data.response) {
           this.setState({ loggerInUser: userObj.name });
+          sessionStorage.setItem('user', userObj.name);
       }
       }
       catch (error) {
@@ -51,6 +58,7 @@ class App extends Component {
 
   }
   handleLogout = () => {
+    sessionStorage.clear();
     this.setState({loggerInUser: ''});
   }
   handleRegister = async () => {
@@ -80,18 +88,20 @@ class App extends Component {
             <h1 className="App-title">Please login to continue :) </h1>
           </header>
           <Form className="login-form">
-            <Form.Field>
+            <Form.Field required>
               <label>User Name</label>
               <input placeholder='User Name' type="text" onChange={(e) => this.setState({ user: e.target.value })} />
             </Form.Field>
-            <Form.Field>
+            <Form.Field required>
               <label>Password </label>
               <input placeholder='Password' type="password" onChange={(e) => this.setState({ pass: e.target.value })} />
             </Form.Field>
             <Button primary onClick={this.handleClick} >Login</Button>
           </Form>
           <br></br>
-          <Button secondary onClick={this.open}>Register</Button>
+          <span>- OR -</span>
+          <br></br>
+          <Button secondary onClick={this.open} className="register-btn">Register</Button>
           <Modal centered={false} open={modalOpen}>
             <Modal.Header>Select a Photo</Modal.Header>
             <Modal.Content >

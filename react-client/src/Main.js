@@ -183,7 +183,7 @@ class Main extends Component {
                 </div>
                 <div className="col-12 main-div row">
 
-                    <div className="col-5">
+                    <div className="col-5 left-div">
                         <div className="new-post">
                             <form>
                                 <div className="form-group">
@@ -223,7 +223,7 @@ class Main extends Component {
                             </Accordion>
                         </div>
                     </div>
-                    <div className="col-7">
+                    <div className="col-6">
                         <UserLogs user={this.props.user} closeFn={this.close.bind(this)} openFlag={this.state.open}></UserLogs>
                         <div className="chart-div">
                             <div>
@@ -240,7 +240,9 @@ class Main extends Component {
                             </div>
                             <div>
                                 <Plot
-                                    data={[{ labels: _.keys(this.state.postData), values: _.values(this.state.postData), type: 'pie' }]}
+                                    data={[{ marker: {
+                                        colors: ["#76b7b2", "#ff8c00", "#1170aa", "#fc7d0b", "#a3acb9", "#57606c", "#5fa2ce", "#c85200", "#7b848f"]
+                                      }, labels: _.keys(this.state.postData), values: _.values(this.state.postData), type: 'pie' }]}
                                     layout={{ title: 'Number of posts created per day' }}
                                 />
                             </div>
