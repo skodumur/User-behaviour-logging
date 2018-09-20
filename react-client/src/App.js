@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggerInUser: 'aaa',
+      loggerInUser: 'bbb',
       user: '',
       pass: '',
       allname: []

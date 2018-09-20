@@ -51,10 +51,21 @@ router.post('/', (req, res, next) => {
             });
         });
     })
-
-  
-
   });
-
+  router.put('/', (req, res, next) => {
+    Post.update({'id': req.body.id}, req.body)
+    .then( result => {
+        console.log(result);
+        res.status(200).json({
+            message: "Post Update",
+            Post:result
+        });
+    }).catch( error => {
+        console.log(error);
+        res.status(500).json({
+            error: error
+        });
+    });
+  });
   
 module.exports = router;

@@ -1,8 +1,15 @@
-.accordion-div {
+.main-div {
     margin: 50px;
-    width: 600px;
-  }
-.new-post {
-    width: 600px;
-    margin: 50px;
+}
+.chart-div{
+    border: solid 1px;
+}
+.thumb-icon {
+    margin-left: 10px !important;
+}
+.ui.styled.accordion {
+    width: auto;
+}
+.accord-div {
+    margin-top: 25px;
 }

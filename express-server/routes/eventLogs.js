@@ -4,26 +4,45 @@ const mongoose = require('mongoose');
 var router = express.Router();
 const EventLog = require('../models/EventLog');
 
-// router.get('/', function(req, res, next) {
-//     EventLog.find()
-//           .select()
-//           .exec()
-//           .then( docs => {
-//               const response = {
-//                   count: docs.length,
-//                   posts: docs
-//               };
-//               //console.log(docs);
-//               res.status(200).json(response);
+router.get('/', function(req, res, next) {
+    EventLog.find()
+          .select()
+          .exec()
+          .then( docs => {
+              const response = {
+                  count: docs.length,
+                  logs: docs
+              };
+              res.status(200).json(response);
               
-//           })
-//           .catch( error => {
-//               console.log(error);
-//               res.status(500).json({
-//                   error: error
-//               })
-//           });
-//   });
+          })
+          .catch( error => {
+              console.log(error);
+              res.status(500).json({
+                  error: error
+              })
+          });
+  });
+
+  router.get('/user/:user', function(req, res, next) {
+    EventLog.find({owner: req.params.user})
+          .select()
+          .exec()
+          .then( docs => {
+              const response = {
+                  count: docs.length,
+                  logs: docs
+              };
+              res.status(200).json(response);
+              
+          })
+          .catch( error => {
+              console.log(error);
+              res.status(500).json({
+                  error: error
+              })
+          });
+  });
 
 router.post('/', (req, res, next) => {
     try {
