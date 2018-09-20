@@ -39,7 +39,7 @@ router.post('/', (req, res, next) => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        pass: 'pwd'
+        pass: req.body.pass
     });
 
     user
@@ -48,11 +48,7 @@ router.post('/', (req, res, next) => {
             console.log(result);
             res.status(200).json({
                 message: "User Created",
-                User: {
-                    pass: result.pass,
-                    name: result.name,
-                    _id: result._id,
-                }
+                user: result
             });
         }).catch(error => {
             console.log(error);

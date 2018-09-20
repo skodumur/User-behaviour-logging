@@ -2,7 +2,14 @@
     margin: 50px;
 }
 .chart-div{
-    border: solid 1px;
+    margin-top: 20px;
+    border: solid 1px #ced4da;
+    border-radius: .28571429rem;
+}
+.new-post {
+    border: solid 1px #ced4da;
+    padding: .75em 1em;
+    border-radius: .28571429rem;
 }
 .thumb-icon {
     margin-left: 10px !important;
@@ -12,4 +19,9 @@
 }
 .accord-div {
     margin-top: 25px;
+}
+.logout {
+    float: right;
+    margin: 10px !important;
+    right: 40px;
 }

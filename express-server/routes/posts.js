@@ -42,7 +42,7 @@ router.post('/', (req, res, next) => {
             console.log(result);
             res.status(200).json({
                 message: "Post Created",
-                Post:result
+                post:result
             });
         }).catch( error => {
             console.log(error);
@@ -58,7 +58,7 @@ router.post('/', (req, res, next) => {
         console.log(result);
         res.status(200).json({
             message: "Post Update",
-            Post:result
+            post:result
         });
     }).catch( error => {
         console.log(error);
