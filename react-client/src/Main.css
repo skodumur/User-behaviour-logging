@@ -2,7 +2,6 @@
     margin: 50px;
 }
 .chart-div{
-    margin-top: 20px;
     border: solid 1px #ced4da;
     border-radius: .28571429rem;
 }
@@ -21,7 +20,13 @@
     margin-top: 25px;
 }
 .logout {
+    right: 40px;
+}
+.my-btn {
     float: right;
     margin: 10px !important;
-    right: 40px;
+}
+.profile {
+    position: absolute;
+    right: 180px;
 }

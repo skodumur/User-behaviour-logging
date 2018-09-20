@@ -13,7 +13,7 @@ class Main extends Component {
         'UPVOTE': 'upvotes',
         'DOWNVOTE': 'downvotes'
     }
-    state = { activeIndex: -1, allPosts: [], newTitle: '', newContent: '', clickData: {}, viewData: {}, postData: {}, activeId: false };
+    state = { open: false, activeIndex: -1, allPosts: [], newTitle: '', newContent: '', clickData: {}, viewData: {}, postData: {}, activeId: false };
     logs = [];
     lastTime ;
     handleClick = (e, titleProps) => {
@@ -166,15 +166,20 @@ class Main extends Component {
             console.log(error);
         }
     }
+    show =  () => this.setState({open: true })
+    close = () => this.setState({ open: false })
     render() {
         const { activeIndex, allPosts } = this.state;
         return (
             <div>
                 <div>
-                <Button icon labelPosition='right' className="logout" onClick={this.handleLogout}>
-                    Logout
+                    <Button icon labelPosition='right' className="my-btn logout" onClick={this.handleLogout}>
+                        Logout
                     <Icon name='right arrow' />
-                </Button>
+                    </Button>
+                    <Button color='instagram' className="my-btn profile" onClick={this.show}>
+                        <Icon name='user' /> Profile
+                    </Button>
                 </div>
                 <div className="col-12 main-div row">
 
@@ -182,7 +187,7 @@ class Main extends Component {
                         <div className="new-post">
                             <form>
                                 <div className="form-group">
-                                    <label>Title</label>
+                                    <label>New Post</label>
                                     <input type="text" className="form-control" value={this.state.newTitle} onChange={(e) => this.setState({ newTitle: e.target.value })} id="exampleFormControlInput1" placeholder="Title for the post" />
                                 </div>
                                 <div className="form-group">
@@ -219,7 +224,7 @@ class Main extends Component {
                         </div>
                     </div>
                     <div className="col-7">
-                        <UserLogs user={this.props.user}></UserLogs>
+                        <UserLogs user={this.props.user} closeFn={this.close.bind(this)} openFlag={this.state.open}></UserLogs>
                         <div className="chart-div">
                             <div>
                                 <Plot
